@@ -1,3 +1,12 @@
+:root {
+  --cards-aspect-ratio: 0.6293586;
+  --cards-columns: 8;
+}
+
+body {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
 #board {
   display: flex;
   flex-direction: column;
@@ -6,9 +15,23 @@
 
 .card-row {
   display: flex;
+
 }
 
 .card {
   background-image: url(../images/characters.png);
   border: 1px solid #000;
+  position: relative;
+  width: calc(0.5 * 100vw / var(--cards-columns));
+  aspect-ratio: var(--cards-aspect-ratio);
+  background-size: calc(var(--cards-columns) * 100%);
+}
+
+.card__title {
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0); /* Centering */
+  bottom: 10%;
+  font-weight: bold;
 }

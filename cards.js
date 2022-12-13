@@ -17,8 +17,8 @@ const characters = {
 
 const cards = [
   [characters.alex, characters.alfred],
-  [],
-  []
+  [characters.alex, characters.alfred],
+  [characters.alex, characters.alfred]
 ]
 
 
