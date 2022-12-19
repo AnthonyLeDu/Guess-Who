@@ -9,29 +9,35 @@ body {
 
 #board {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
 
-.card-row {
-  display: flex;
-
-}
-
-.card {
-  background-image: url(../images/characters.png);
+.card-container {
   border: 1px solid #000;
-  position: relative;
   width: calc(0.5 * 100vw / var(--cards-columns));
   aspect-ratio: var(--cards-aspect-ratio);
+}
+
+.card-front {
+  /* visibility: hidden; */
+  background-image: url(../images/characters.png);
+  width: 100%;
+  height: 100%;
+  position: relative;
   background-size: calc(var(--cards-columns) * 100%);
 }
 
-.card__title {
+.card-front__title {
+  visibility: inherit;
   text-align: center;
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0); /* Centering */
   bottom: 10%;
   font-weight: bold;
+}
+
+.card-back {
+  visibility: hidden;
 }
