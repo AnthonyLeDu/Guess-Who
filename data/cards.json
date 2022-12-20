@@ -1,66 +1,258 @@
 {
-  "caracteristics": {
+  "specs": {
     "gender": ["Male", "Female"],
     "hair color": ["White", "Blonde", "Black", "Brown", "Red"],
     "eyes color": ["Brown", "Blue"],
+    "hair length": ["Bold", "Short", "Mid-long", "Long"],
     "moustache": [false, true],
     "hat": [false, true],
     "glasses": [false, true],
-    "hair length": ["Bold", "Short", "Mid-long", "Long"],
     "beard": [false, true]
   },
+
+  "specsDisplayOrder": [
+    "gender",
+    "eyes color",
+    "hair color",
+    "hair length",
+    "moustache",
+    "beard",
+    "hat",
+    "glasses"
+  ],
 
   "characters": {
     "samuel": {
       "spriteCoordinates": [0, 0],
-      "caracteristics": {
+      "specs": {
         "gender": 0,
         "hair color": 0,
         "eyes color": 0,
-        "moustache": 0,
-        "hat": 0,
-        "glasses": 1,
         "hair length": 0,
-        "beard": 0
+        "glasses": 1
       }
     },
     "léon": {
       "spriteCoordinates": [1, 0],
-      "caracteristics": {
+      "specs": {
         "gender": 0,
         "hair color": 1,
         "eyes color": 0,
-        "moustache": 0,
-        "hat": 0,
-        "glasses": 1,
         "hair length": 1,
-        "beard": 0
+        "glasses": 1
       }
     },
     "simon": {
       "spriteCoordinates": [2, 0],
-      "caracteristics": {
+      "specs": {
         "gender": 0,
         "hair color": 0,
         "eyes color": 0,
-        "moustache": 0,
-        "hat": 0,
-        "glasses": 1,
         "hair length": 1,
-        "beard": 0
+        "glasses": 1
       }
     },
     "martin": {
       "spriteCoordinates": [3, 0],
-      "caracteristics": {
+      "specs": {
         "gender": 0,
         "hair color": 0,
         "eyes color": 0,
-        "moustache": 0,
-        "hat": 1,
-        "glasses": 0,
         "hair length": 1,
-        "beard": 0
+        "hat": 1
+      }
+    },
+    "luc": {
+      "spriteCoordinates": [4, 0],
+      "specs": {
+        "gender": 0,
+        "hair color": 2,
+        "eyes color": 0,
+        "hair length": 1,
+        "beard": 1
+      }
+    },
+    "clara": {
+      "spriteCoordinates": [5, 0],
+      "specs": {
+        "gender": 1,
+        "hair color": 1,
+        "eyes color": 1,
+        "hair length": 3
+      }
+    },
+    "anita": {
+      "spriteCoordinates": [6, 0],
+      "specs": {
+        "gender": 1,
+        "hair color": 1,
+        "eyes color": 1,
+        "hair length": 3
+      }
+    },
+    "alfred": {
+      "spriteCoordinates": [7, 0],
+      "specs": {
+        "gender": 0,
+        "hair color": 4,
+        "eyes color": 1,
+        "hair length": 3,
+        "moustache": 1
+      }
+    },
+    "suzane": {
+      "spriteCoordinates": [0, 1],
+      "specs": {
+        "gender": 1,
+        "hair color": 0,
+        "eyes color": 0,
+        "hair length": 3
+      }
+    },
+    "roméo": {
+      "spriteCoordinates": [1, 1],
+      "specs": {
+        "gender": 0,
+        "hair color": 3,
+        "eyes color": 0,
+        "hair length": 0,
+        "moustache": 1,
+        "beard": 1
+      }
+    },
+    "omar": {
+      "spriteCoordinates": [2, 1],
+      "specs": {
+        "gender": 0,
+        "hair color": 4,
+        "eyes color": 0,
+        "hair length": 1
+      }
+    },
+    "manu": {
+      "spriteCoordinates": [3, 1],
+      "specs": {
+        "gender": 0,
+        "hair color": 3,
+        "eyes color": 0,
+        "hair length": 1,
+        "moustache": 1
+      }
+    },
+    "lucas": {
+      "spriteCoordinates": [4, 1],
+      "specs": {
+        "gender": 0,
+        "hair color": 4,
+        "eyes color": 0,
+        "hair length": 0
+      }
+    },
+    "mario": {
+      "spriteCoordinates": [5, 1],
+      "specs": {
+        "gender": 0,
+        "hair color": 1,
+        "eyes color": 0,
+        "hair length": 1,
+        "beard": 1
+      }
+    },
+    "jérémie": {
+      "spriteCoordinates": [6, 1],
+      "specs": {
+        "gender": 0,
+        "hair color": 3,
+        "eyes color": 0,
+        "hair length": 1,
+        "hat": 1
+      }
+    },
+    "max": {
+      "spriteCoordinates": [7, 1],
+      "specs": {
+        "gender": 0,
+        "hair color": 2,
+        "eyes color": 0,
+        "hair length": 1,
+        "moustache": 1
+      }
+    },
+    "timéo": {
+      "spriteCoordinates": [0, 2],
+      "specs": {
+        "gender": 0,
+        "hair color": 2,
+        "eyes color": 1,
+        "hair length": 0,
+        "glasses": 1
+      }
+    },
+    "oscar": {
+      "spriteCoordinates": [1, 2],
+      "specs": {
+        "gender": 0,
+        "hair color": 3,
+        "eyes color": 1,
+        "hair length": 1
+      }
+    },
+    "éric": {
+      "spriteCoordinates": [2, 2],
+      "specs": {
+        "gender": 0,
+        "hair color": 0,
+        "eyes color": 1,
+        "hair length": 1
+      }
+    },
+    "maria": {
+      "spriteCoordinates": [3, 2],
+      "specs": {
+        "gender": 1,
+        "hair color": 3,
+        "eyes color": 0,
+        "hair length": 3,
+        "hat": 1
+      }
+    },
+    "tony": {
+      "spriteCoordinates": [4, 2],
+      "specs": {
+        "gender": 0,
+        "hair color": 4,
+        "eyes color": 0,
+        "hair length": 0,
+        "beard": 1
+      }
+    },
+    "félix": {
+      "spriteCoordinates": [5, 2],
+      "specs": {
+        "gender": 0,
+        "hair color": 1,
+        "eyes color": 0,
+        "hair length": 1,
+        "hat": 1
+      }
+    },
+    "charlie": {
+      "spriteCoordinates": [6, 2],
+      "specs": {
+        "gender": 0,
+        "hair color": 1,
+        "eyes color": 0,
+        "hair length": 1,
+        "moustache": 1
+      }
+    },
+    "anna": {
+      "spriteCoordinates": [7, 2],
+      "specs": {
+        "gender": 1,
+        "hair color": 2,
+        "eyes color": 0,
+        "hair length": 1
       }
     }
   }

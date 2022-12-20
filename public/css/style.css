@@ -1,6 +1,10 @@
 :root {
+  --cards-sprite-columns: 8;
   --cards-aspect-ratio: 0.6293586;
-  --cards-columns: 8;
+  --board-width: 70vw;
+  --board-columns: 8;
+  --cards-border: 1px;
+  --cards-width: calc((var(--board-width) / var(--board-columns)) - var(--cards-border) * 2);
 }
 
 body {
@@ -9,35 +13,55 @@ body {
 
 #board {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  width: calc(var(--board-width));
+  margin: 0 auto;
 }
 
 .card-container {
-  border: 1px solid #000;
-  width: calc(0.5 * 100vw / var(--cards-columns));
-  aspect-ratio: var(--cards-aspect-ratio);
+  border: var(--cards-border) solid #000;
+  width: var(--cards-width);
+  height: calc(var(--cards-width) / var(--cards-aspect-ratio));
+  position: relative;
+}
+
+.card-front, .card-details {
+  width: 100%;
+  height: 100%;
 }
 
 .card-front {
-  /* visibility: hidden; */
   background-image: url(../images/characters.png);
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background-size: calc(var(--cards-columns) * 100%);
+  position: absolute;
+  background-size: calc(var(--cards-sprite-columns) * 100%);
 }
 
 .card-front__title {
-  visibility: inherit;
   text-align: center;
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0); /* Centering */
-  bottom: 10%;
+  bottom: 5%;
   font-weight: bold;
+  font-size: calc(var(--cards-width) * 0.18);
 }
 
-.card-back {
-  visibility: hidden;
+.card-details {
+  display: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.card-details p {
+  font-size: calc(var(--cards-width) * 0.1);
+}
+
+
+@media (orientation : portrait) {
+  :root {
+    --board-width: 90vw;
+    --board-columns: 6;
+  }
 }
