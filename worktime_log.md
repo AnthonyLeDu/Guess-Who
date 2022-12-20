@@ -16,7 +16,8 @@
 
 0.25h
 1h
+0.5h
 
 ## TOTAL TIME
 
-4h
+4.5h
