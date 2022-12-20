@@ -1,7 +1,7 @@
 :root {
   --cards-sprite-columns: 8;
   --cards-aspect-ratio: 0.6293586;
-  --board-width: 70vw;
+  --board-width: 80vw;
   --board-columns: 8;
   --cards-border: 1px;
   --cards-width: calc((var(--board-width) / var(--board-columns)) - var(--cards-border) * 2);
@@ -27,14 +27,14 @@ body {
   position: relative;
 }
 
-.card-front, .card-details {
+.card-front, .card-front-details {
   width: 100%;
   height: 100%;
 }
 
 .card-front {
   background-image: url(../images/characters.png);
-  position: absolute;
+  position: relative;
   background-size: calc(var(--cards-sprite-columns) * 100%);
 }
 
@@ -48,20 +48,26 @@ body {
   font-size: calc(var(--cards-width) * 0.18);
 }
 
-.card-details {
+.card-front-details {
   display: none;
   position: absolute;
   z-index: 1;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
 }
 
-.card-details p {
+.card-front-details p {
   font-size: calc(var(--cards-width) * 0.1);
 }
 
+footer {
+  text-align: center;
+  margin: 1em 0;
+}
 
 @media (orientation : portrait) {
   :root {
-    --board-width: 90vw;
+    --board-width: 100vw;
     --board-columns: 6;
   }
 }

@@ -16,6 +16,37 @@ const app = {
   drawBoard() {
 
     const addCard = (boardElem, characterKey) => {
+
+      // DEBUG - Card details (on hover)
+      const addDetails = (cardElem) => {
+        const cardFrontDetailsElem = document.createElement('div');
+        cardElem.appendChild(cardFrontDetailsElem);
+        cardFrontDetailsElem.className = 'card-front-details';
+        characterSpecs = app.cardsData.characters[characterKey]['specs'];
+        for (spec of app.cardsData.specsDisplayOrder) {
+          specsOptions = app.cardsData.specs[spec];
+          const cardBackSpecLineElem = document.createElement('p');
+          cardFrontDetailsElem.appendChild(cardBackSpecLineElem);
+          // Details line
+          cardBackSpecLineElem.innerText = `${capitalize(spec)} = `;
+          // Checking that the character has the spec, otherwise give it a 0 value (default)
+          const charSpecValue = characterSpecs.hasOwnProperty(spec) ? characterSpecs[spec] : 0;
+          // Checking that the character's spec value is within the spec values range
+          if (charSpecValue <= specsOptions.length) {  
+            cardBackSpecLineElem.innerText += `${specsOptions[charSpecValue]}`;
+          } else {
+            cardBackSpecLineElem.innerText += 'UNKNOWN';
+          }
+        }
+        // Show/hide cards details when hovering
+        cardElem.addEventListener('mouseover', () => {
+          cardFrontDetailsElem.style.display = 'block';
+        })
+        cardElem.addEventListener('mouseleave', () => {
+          cardFrontDetailsElem.style.display = 'none';
+        })
+      }
+
       // Card container
       const cardElem = document.createElement('div');
       boardElem.appendChild(cardElem);
@@ -34,36 +65,8 @@ const app = {
       cardTitleElem.className = 'card-front__title';
       cardTitleElem.innerText = capitalize(characterKey);
       
-      // Card details (on hover)
-      const cardBackElem = document.createElement('div');
-      cardElem.appendChild(cardBackElem);
-      cardBackElem.className = 'card-details';
-      characterSpecs = app.cardsData.characters[characterKey]['specs'];
-      for (spec of app.cardsData.specsDisplayOrder) {
-        specsOptions = app.cardsData.specs[spec];
-        const cardBackSpecLineElem = document.createElement('p');
-        cardBackElem.appendChild(cardBackSpecLineElem);
-        // Details line
-        cardBackSpecLineElem.innerText = `${capitalize(spec)} = `;
-        // Checking that the character has the spec, otherwise give it a 0 value (default)
-        const charSpecValue = characterSpecs.hasOwnProperty(spec) ? characterSpecs[spec] : 0;
-        // Checking that the character's spec value is within the spec values range
-        if (charSpecValue <= specsOptions.length) {  
-          cardBackSpecLineElem.innerText += `${specsOptions[charSpecValue]}`;
-        } else {
-          cardBackSpecLineElem.innerText += 'UNKNOWN';
-        }
-      }
-      
-      // Show/hide cards details when hovering
-      cardElem.addEventListener('mouseover', () => {
-        cardFrontElem.style.opacity = 0.4;
-        cardBackElem.style.display = 'block';
-      })
-      cardElem.addEventListener('mouseleave', () => {
-        cardFrontElem.style.opacity = 1.0;
-        cardBackElem.style.display = 'none';
-      })
+      // Card details (DEBUG)
+      addDetails(cardFrontElem);
     }
 
     // Drawing the board
