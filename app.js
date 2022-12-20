@@ -1,4 +1,5 @@
 const app = {
+  cardsData: {},
   cardsSpriteColumns: 8,
   cardsSpriteRows: 3,
 
@@ -6,9 +7,9 @@ const app = {
 
     const addCard = (board, characterKey) => {
       charName = characterKey.charAt(0).toUpperCase() + characterKey.slice(1);
-      cardCoordinates = cards.characters[characterKey]['spriteCoordinates'];
-      charCaracteristics = cards.characters[characterKey]['caracteristics'];
-      // Car container
+      [column, row] = app.cardsData.characters[characterKey]['spriteCoordinates'];
+      charCaracteristics = app.cardsData.characters[characterKey]['caracteristics'];
+      // Card container
       const cardElem = document.createElement('div');
       boardElem.appendChild(cardElem);
       cardElem.className = 'card-container';
@@ -16,7 +17,7 @@ const app = {
       const cardFrontElem = document.createElement('div');
       cardElem.appendChild(cardFrontElem);
       cardFrontElem.className = 'card-front';
-      cardFrontElem.style.backgroundPosition = `${100 * cardCoordinates[0] / (app.cardsSpriteColumns - 1)}% ${100 * cardCoordinates[1] / (app.cardsSpriteRows - 1 )}%`;
+      cardFrontElem.style.backgroundPosition = `${100 * column / (app.cardsSpriteColumns - 1)}% ${100 * row / (app.cardsSpriteRows - 1 )}%`;
       // Card title
       const cardTitleElem = document.createElement('div');
       cardFrontElem.appendChild(cardTitleElem);
@@ -39,16 +40,19 @@ const app = {
     }
 
     // Drawing the board
-    console.log(cards);
+    console.log(app.cardsData);
     const boardElem = document.getElementById('board');
 
     // Adding cards
-    for (charKey in cards.characters) {
+    for (charKey in app.cardsData.characters) {
       addCard(boardElem, charKey);
     }
   },
 
-  init() {
+  async init() {
+    // Read cards data
+    app.cardsData = await fetch("./data/cards.json").then(response => response.json());
+    // Draw board
     app.drawBoard();
   }
 }
