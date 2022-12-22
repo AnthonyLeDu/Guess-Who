@@ -38,7 +38,8 @@ const app = {
       choices: [
         { caption: 'Blue', callback: () => { app.setPlayerColor('blue'); }, checked: true },
         { caption: 'Red', callback: () => { app.setPlayerColor('red'); } },
-        { caption: 'Yellow', callback: () => { app.setPlayerColor('yellow'); } }
+        { caption: 'Yellow', callback: () => { app.setPlayerColor('yellow'); } },
+        { caption: 'Green', callback: () => { app.setPlayerColor('green'); } }
       ]
     }
   ],
@@ -49,12 +50,13 @@ const app = {
   cardsSpriteRows: 3,
 
   initOptions() {
-    const optionElem = document.getElementById('options');
+    // Filling the options pannel
+    const optionsPanelElem = document.getElementById('options-panel');
     for (appOption of app.options) {
       // Main option container
       const optionItemElem = document.createElement('li');
       optionItemElem.className = 'options-item';
-      optionElem.appendChild(optionItemElem);
+      optionsPanelElem.appendChild(optionItemElem);
       // Option caption
       const optionItemCaptionElem = document.createElement('p');
       optionItemElem.appendChild(optionItemCaptionElem);
@@ -97,6 +99,11 @@ const app = {
         }
       });
     };
+    // Options button callback
+    document.getElementById('options__button').addEventListener('click', (event) => {
+      optionsPanelElem.classList.toggle('options-panel--hidden');
+      event.target.classList.toggle('options__button--activated');
+    })
   },
 
   setPlayerColor(color) {

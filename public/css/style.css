@@ -9,11 +9,14 @@
   --cards-width: calc((var(--board-width) / var(--board-columns)) - var(--cards-border) * 2 - var(--cards-gap) * 2);
   --cards-height: calc(var(--cards-width) / var(--cards-aspect-ratio));
   --player-color-h: 0;
+  --player-color-s: 80%;
+  --player-color-l: 60%;
   --player-color-h-blue: 217;
   --player-color-h-red: 0;
-  --player-color-h-yellow: 35;
-  --player-color: hsl(var(--player-color-h), 100%, 75%);
-  --player-color-semi-transparent: hsla(var(--player-color-h), 100%, 75%, 60%);
+  --player-color-h-yellow: 45;
+  --player-color-h-green: 130;
+  --player-color: hsl(var(--player-color-h), var(--player-color-s), var(--player-color-l));
+  --player-color-semi-transparent: hsla(var(--player-color-h), var(--player-color-s), var(--player-color-l), 80%);
 }
 
 body {
@@ -22,6 +25,7 @@ body {
 
 h2 {
   font-size: 1.5em;
+  margin: 0.5em 0;
   text-transform: uppercase;
   font-weight: bold;
 }
@@ -29,10 +33,42 @@ h2 {
 #app {
   display: flex;
   justify-content: space-evenly;
+  position: relative;
 }
 
-/* OPTIONS PANNEL */
+/* OPTIONS */
+
 #options {
+  position: absolute;
+  left: 0;
+  margin: 1em;
+}
+
+#options__button {
+  position: absolute;
+  border-radius: 100vmax;
+  width: 2.5rem;
+  margin: 0.5em;
+  object-fit: cover;
+  cursor: pointer;
+  z-index: 1;
+}
+
+#options__button:hover {
+  transform: scale(1.1);
+}
+
+#options__button.options__button--activated {
+  animation: rotate360 1s ease-in-out;
+}
+
+@keyframes rotate360 {
+  100% {
+    transform: rotate(180deg)
+  }
+}
+
+#options-panel {
   width: var(--options-width);
   background-color: var(--player-color-semi-transparent);
   display: flex;
@@ -41,7 +77,21 @@ h2 {
   justify-content: center;
   align-items: center;
   font-size: 0.75rem;
-  padding: calc(var(--options-width) * 0.1);
+  padding: 1.5em;
+  border-radius: 1em;
+  box-shadow: -5px 5px 15px rgb(0, 0, 0);
+  /* Hiding it beyond screen border */
+  position: relative;
+  transition-property: left, opacity;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
+  left: 0%;
+  opacity: 100%;
+}
+
+#options-panel.options-panel--hidden {
+  left: -150%;
+  opacity: 0%;
 }
 
 .options-item {
@@ -52,7 +102,7 @@ h2 {
 
 .options-item__title {
   font-weight: bold;
-  margin: 0.5em;
+  margin: 1em;
 }
 
 /* From https://cssanimation.dev/radio-switch/ */
@@ -60,19 +110,22 @@ h2 {
 .radio-switch {
   display: flex;
   justify-content: space-evenly;
-  background: #d1d5db;
+  background: #555;
   border-radius: 100vmax;
   position: relative;
+  width: 100%;
   --switch-positions: 2; /* To init by script */
   --current-index: 0; /* To init by script */
 }
 
 .radio-switch__label {
   cursor: pointer;
-  padding: 0.25em;
+  padding: 0.75em 0.25em;
   flex-basis: calc(100% / var(--switch-positions));
-  z-index: 1;
+  z-index: 10;
   user-select: none;
+  color: #FFF;
+  text-shadow: 0 0 2px #000;
 }
 
 .radio-switch__selection {
@@ -179,7 +232,7 @@ h2 {
 
 .card-back__image {
   position: absolute;
-  mix-blend-mode: screen;
+  mix-blend-mode:hard-light;
   background-image: url(../images/card-back.png);
   background-size: cover;
 }
