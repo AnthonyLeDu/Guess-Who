@@ -26,8 +26,9 @@
   --player-color-h-yellow: 45;
   --player-color-h-green: 120;
   --player-color-h-purple: 245;
+  
   --player-color: hsl(var(--player-color-h), var(--player-color-s), var(--player-color-l));
-  --player-color-semi-transparent: hsla(var(--player-color-h), var(--player-color-s), var(--player-color-l), 80%);
+  --player-color-semi-transparent: hsla(var(--player-color-h), var(--player-color-s), var(--player-color-l), 85%);
 }
 
 header {
@@ -42,13 +43,6 @@ header .game-logo {
 
 body {
   font-family: Roboto, Arial, Helvetica, sans-serif;
-}
-
-h2 {
-  font-size: 1.5em;
-  margin: 0.5em 0;
-  text-transform: uppercase;
-  font-weight: bold;
 }
 
 #app {
@@ -212,7 +206,7 @@ footer aside {
 @media (orientation : landscape) {
   :root {
     --board-width: 70vw;
-    --options-width: 35vw;
+    --options-width: 50vw;
     --board-columns: 8;
   }
 

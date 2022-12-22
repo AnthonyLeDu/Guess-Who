@@ -1,10 +1,17 @@
 #options {
   position: absolute;
   width: var(--options-width);
-  z-index: 1;
   display: flex;
   justify-content: center;
   padding: 1rem;
+  color: #FFF;
+}
+
+
+#options h2 {
+  font-size: 2em;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 #options__button {
@@ -13,7 +20,7 @@
   width: 2.5rem;
   margin: 1em;
   cursor: pointer;
-  z-index: 1;
+  z-index: 2;
 }
 
 #options__button:hover {
@@ -31,6 +38,8 @@
 }
 
 #options-panel {
+  z-index: 1;
+  position: relative;
   width: 100%;
   box-sizing: border-box;
   height: fit-content;
@@ -39,22 +48,18 @@
   flex-direction: column;
   gap: 1rem;
   align-items: center;
-  font-size: 0.75rem;
   padding: 1.5em;
   border-radius: 1em;
   box-shadow: 5px 5px 10px #555;
   /* Hiding it beyond screen border */
-  transition-property: left, opacity;
+  transition-property: transform, opacity;
   transition-duration: 0.5s;
   transition-timing-function: ease-in-out;
-  
-  /* transform: translateY(-100%); */
-  opacity: 100%;
-
 }
 
 #options-panel.options-panel--hidden {
   opacity: 0%;
+  transform: translate(0, -110%);
 }
 
 .options-item {
@@ -65,6 +70,7 @@
 
 .options-item__title {
   font-weight: bold;
+  font-size: 1.5em;
   margin: 1em;
 }
 
@@ -87,7 +93,6 @@
   flex-basis: calc(100% / var(--switch-positions));
   z-index: 10;
   user-select: none;
-  color: #FFF;
   text-shadow: 0 0 2px #000;
 }
 
@@ -113,5 +118,10 @@
 @media (orientation : landscape) {
   #options {
     left: 0;
+  }
+
+  #options-panel.options-panel--hidden {
+    opacity: 0%;
+    transform: translate(-110%, 0);
   }
 }
