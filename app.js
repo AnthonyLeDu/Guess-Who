@@ -29,6 +29,29 @@ const camelCased = function (s, uppercased) {
   return uppercased ? newString.toUpperCase() : newString;
 }
 
+/**
+ * Shuffles an array
+ * (from : https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
+ * @param {Array} array The array to shuffle
+ * @returns The array, shuffled
+ */
+const shuffle = function(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle.
+  while (currentIndex != 0) {
+
+    // Pick a remaining element.
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
+}
+
 const app = {
   debug: false,
   options: [
@@ -120,16 +143,20 @@ const app = {
     rootElem.style.setProperty('--player-color-h', `var(--player-color-h-${app.playerColor})`);
   },
 
-  drawSecretCard() {
-    const boardElem = document.getElementById('board');
+  shuffledCharacterKeys() {
     // Randomly pick a character's key
     const keys = Object.keys(app.cardsData.characters);
-    const characterKey = keys[ keys.length * Math.random() << 0];
+    return shuffle(keys);
+  },
+
+  drawSecretCard() {
+    const boardElem = document.getElementById('board');
+    const characterKey = app.shuffledCharacterKeys()[0];
     // Create the card
     boardElem.appendChild(app.createCard(characterKey, true));
   },
 
-  createCard(characterKey, isSecretCard) {
+  createCard(characterKey, isSecretCard, index=null) {
     // DEBUG - Card details (on hover)
     const addDetails = (cardElem) => {
       const cardFrontDetailsElem = document.createElement('div');
@@ -171,6 +198,7 @@ const app = {
     cardContainerElem.appendChild(cardElem);
     cardElem.className = 'card card--inactive';
     // Trigger the 'show' animation at start and then allows player to click on the cards
+    const flipTimeout = isSecretCard ? 1000 : 300 + (index * 10);
     setTimeout(() => {
       cardElem.classList.remove('card--inactive');
       cardContainerElem.style.cursor = 'pointer';
@@ -178,10 +206,7 @@ const app = {
       cardContainerElem.addEventListener('click', () => {
         cardElem.classList.toggle('card--inactive');
       })
-    }, isSecretCard ? 1000 : 300);
-
-    
-    
+    }, flipTimeout);
 
     // Card front (character face)
     const cardFrontElem = document.createElement('div');
@@ -216,9 +241,9 @@ const app = {
     // Drawing the board
     const boardElem = document.getElementById('board');
     // Adding the cards
-    for (charKey in app.cardsData.characters) {
-      boardElem.appendChild(app.createCard(charKey, false));
-    }
+    app.shuffledCharacterKeys().forEach((charKey, index) => {
+      boardElem.appendChild(app.createCard(charKey, false, index));
+    });
   },
 
   async init() {
