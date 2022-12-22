@@ -16,9 +16,12 @@
 
 #options__button {
   position: absolute;
+  transition-property: filter, transform;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
   left: 1em;
   width: 2.5rem;
-  margin: 1em;
+  margin: 0.7em;
   cursor: pointer;
   z-index: 2;
 }
@@ -28,13 +31,8 @@
 }
 
 #options__button.options__button--activated {
-  animation: rotate360 0.5s ease-in-out;
-}
-
-@keyframes rotate360 {
-  100% {
-    transform: rotate(180deg)
-  }
+  filter: invert(100%);
+  transform: rotate(180deg);
 }
 
 #options-panel {
