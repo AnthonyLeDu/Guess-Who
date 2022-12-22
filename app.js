@@ -113,17 +113,20 @@ const app = {
 
   updateGameStyle() {
     const rootElem = document.querySelector(':root');
+    // Set the sprite columns and rows
+    rootElem.style.setProperty('--cards-sprite-rows', app.cardsSpriteRows);
+    rootElem.style.setProperty('--cards-sprite-columns', app.cardsSpriteColumns);
     // Set the player's color variable
-    rootElem.style.setProperty('--player-color-h', `var(--player-color-h-${app.playerColor}`);
+    rootElem.style.setProperty('--player-color-h', `var(--player-color-h-${app.playerColor})`);
   },
 
   drawSecretCard() {
-    const appElem = document.getElementById('app');
+    const boardElem = document.getElementById('board');
     // Randomly pick a character's key
     const keys = Object.keys(app.cardsData.characters);
     const characterKey = keys[ keys.length * Math.random() << 0];
     // Create the card
-    appElem.appendChild(app.createCard(characterKey, true));
+    boardElem.appendChild(app.createCard(characterKey, true));
   },
 
   createCard(characterKey, isSecretCard) {
@@ -158,23 +161,31 @@ const app = {
     }
 
     // Card container
-    const cardElem = document.createElement('div');
-    cardElem.className = 'card-container';
-    cardElem.classList.add( isSecretCard ? 'card-container--secret' : 'card-container--board');
+    const cardContainerElem = document.createElement('div');
+    cardContainerElem.className = 'card-container';
+    cardContainerElem.style.cursor = 'auto';
+    cardContainerElem.classList.add( isSecretCard ? 'card-container--secret' : 'card-container--board');
 
     // Car inner (for the flipping effect)
-    const cardInnerElem = document.createElement('div');
-    cardElem.appendChild(cardInnerElem);
-    cardInnerElem.className = 'card';
+    const cardElem = document.createElement('div');
+    cardContainerElem.appendChild(cardElem);
+    cardElem.className = 'card card--inactive';
+    // Trigger the 'show' animation at start and then allows player to click on the cards
+    setTimeout(() => {
+      cardElem.classList.remove('card--inactive');
+      cardContainerElem.style.cursor = 'pointer';
+      // When cardElem is clicked, toggle the cardInnerElem active class
+      cardContainerElem.addEventListener('click', () => {
+        cardElem.classList.toggle('card--inactive');
+      })
+    }, isSecretCard ? 1000 : 300);
 
-    // When cardElem is clicked, toggle the cardInnerElem active class
-    cardElem.addEventListener('click', () => {
-      cardInnerElem.classList.toggle('card--inactive');
-    })
+    
+    
 
     // Card front (character face)
     const cardFrontElem = document.createElement('div');
-    cardInnerElem.appendChild(cardFrontElem);
+    cardElem.appendChild(cardFrontElem);
     cardFrontElem.className = 'card-front';
     [column, row] = app.cardsData.characters[characterKey]['spriteCoordinates'];
     cardFrontElem.style.backgroundPosition = `${100 * column / (app.cardsSpriteColumns - 1)}% ${100 * row / (app.cardsSpriteRows - 1)}%`;
@@ -190,24 +201,23 @@ const app = {
 
     // Card back
     const cardBackElem = document.createElement('div');
-    cardInnerElem.appendChild(cardBackElem);
-    cardBackElem.className = `card-back card-back--${app.playerColor}`;
+    cardElem.appendChild(cardBackElem);
+    cardBackElem.className = 'card-back';
+    if (!isSecretCard) cardBackElem.classList.add(`card-back--${app.playerColor}`);
 
     const cardBackImageElem = document.createElement('div');
     cardBackElem.appendChild(cardBackImageElem);
     cardBackImageElem.className = 'card-back__image';
 
-    return cardElem;
+    return cardContainerElem;
   },
 
   redrawBoard() {
     // Drawing the board
     const boardElem = document.getElementById('board');
-    
     // Adding the cards
     for (charKey in app.cardsData.characters) {
       boardElem.appendChild(app.createCard(charKey, false));
-
     }
   },
 
