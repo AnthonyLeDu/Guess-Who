@@ -7,6 +7,7 @@
   <title>Guess Who</title>
   <link rel="stylesheet" href="./public/css/reset.css">
   <link rel="stylesheet" href="./public/css/style.css">
+  <link rel="stylesheet" href="./public/css/options.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -14,17 +15,17 @@
 </head>
 <body>
   <header>
-
+    <img class="game-logo" src="./public/images/game-logo.png" alt="Guess Who">
+    <div id="options">
+      <img id="options__button" src="./public/images/options.png" alt="Options">
+      <ul id="options-panel" class="options-panel--hidden">
+        <h2>Options</h2>
+      </ul>
+    </div>
   </header>
   <main>
     <div id="app">
       <div id="board"></div>
-      <div id="options">
-        <img id="options__button" src="./public/images/options.png" alt="Options">
-        <ul id="options-panel" class="options-panel--hidden">
-          <h2>Options</h2>
-        </ul>
-      </div>
     </div>
   </main>
   <footer>

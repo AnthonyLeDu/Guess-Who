@@ -38,8 +38,8 @@ const app = {
       choices: [
         { caption: 'Blue', callback: () => { app.setPlayerColor('blue'); }, checked: true },
         { caption: 'Red', callback: () => { app.setPlayerColor('red'); } },
-        { caption: 'Yellow', callback: () => { app.setPlayerColor('yellow'); } },
-        { caption: 'Green', callback: () => { app.setPlayerColor('green'); } }
+        { caption: 'Green', callback: () => { app.setPlayerColor('green'); } },
+        { caption: 'Purple', callback: () => { app.setPlayerColor('purple'); } }
       ]
     }
   ],

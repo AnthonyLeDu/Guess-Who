@@ -1,0 +1,117 @@
+#options {
+  position: absolute;
+  width: var(--options-width);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#options__button {
+  position: absolute;
+  left: 1em;
+  width: 2.5rem;
+  margin: 1em;
+  cursor: pointer;
+  z-index: 1;
+}
+
+#options__button:hover {
+  transform: scale(1.1);
+}
+
+#options__button.options__button--activated {
+  animation: rotate360 0.5s ease-in-out;
+}
+
+@keyframes rotate360 {
+  100% {
+    transform: rotate(180deg)
+  }
+}
+
+#options-panel {
+  width: 100%;
+  box-sizing: border-box;
+  height: fit-content;
+  background-color: var(--player-color-semi-transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  font-size: 0.75rem;
+  padding: 1.5em;
+  border-radius: 1em;
+  box-shadow: 5px 5px 10px #555;
+  /* Hiding it beyond screen border */
+  transition-property: left, opacity;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
+  
+  /* transform: translateY(-100%); */
+  opacity: 100%;
+
+}
+
+#options-panel.options-panel--hidden {
+  opacity: 0%;
+}
+
+.options-item {
+  width: 100%;
+  text-align: center;
+  border-top: 1px solid #fff;
+}
+
+.options-item__title {
+  font-weight: bold;
+  margin: 1em;
+}
+
+/* From https://cssanimation.dev/radio-switch/ */
+
+.radio-switch {
+  display: flex;
+  justify-content: space-evenly;
+  background: #555;
+  border-radius: 100vmax;
+  position: relative;
+  width: 100%;
+  --switch-positions: 2; /* To init by script */
+  --current-index: 0; /* To init by script */
+}
+
+.radio-switch__label {
+  cursor: pointer;
+  padding: 0.75em 0.25em;
+  flex-basis: calc(100% / var(--switch-positions));
+  z-index: 10;
+  user-select: none;
+  color: #FFF;
+  text-shadow: 0 0 2px #000;
+}
+
+.radio-switch__selection {
+  position: absolute;
+  width: calc(100% / var(--switch-positions));
+  border-radius: 100vmax;
+  left: calc(100% / var(--switch-positions) * var(--current-index));
+  height: 100%;
+  pointer-events: none;
+  background-color: var(--player-color);
+  transition: left 0.3s;
+}
+
+.radio-switch__input {
+  display: none;
+}
+
+.radio-switch__input:checked+.radio-switch__selection {
+  opacity: 0.5;
+}
+
+@media (orientation : landscape) {
+  #options {
+    left: 0;
+  }
+}

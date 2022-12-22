@@ -1,9 +1,13 @@
 :root {
+  /* Mobile-first options */
+  --board-width: 100vw;
+  --board-columns: 5;
+  --options-width: 95vw;
+  
+  /* Sprite */
   --cards-sprite-columns: 8;
   --cards-aspect-ratio: 0.6293586;
-  --board-width: 80vw;
-  --options-width: 15vw;
-  --board-columns: 8;
+
   --cards-border: 1px;
   --cards-gap: 5px;
   --cards-width: calc((var(--board-width) / var(--board-columns)) - var(--cards-border) * 2 - var(--cards-gap) * 2);
@@ -14,9 +18,20 @@
   --player-color-h-blue: 217;
   --player-color-h-red: 0;
   --player-color-h-yellow: 45;
-  --player-color-h-green: 130;
+  --player-color-h-green: 120;
+  --player-color-h-purple: 245;
   --player-color: hsl(var(--player-color-h), var(--player-color-s), var(--player-color-l));
   --player-color-semi-transparent: hsla(var(--player-color-h), var(--player-color-s), var(--player-color-l), 80%);
+}
+
+header {
+  display: flex;
+  justify-content: center;
+}
+
+header .game-logo {
+  width: 30vw;
+  margin: 1em;
 }
 
 body {
@@ -36,118 +51,6 @@ h2 {
   position: relative;
 }
 
-/* OPTIONS */
-
-#options {
-  position: absolute;
-  left: 0;
-  margin: 1em;
-}
-
-#options__button {
-  position: absolute;
-  border-radius: 100vmax;
-  width: 2.5rem;
-  margin: 0.5em;
-  object-fit: cover;
-  cursor: pointer;
-  z-index: 1;
-}
-
-#options__button:hover {
-  transform: scale(1.1);
-}
-
-#options__button.options__button--activated {
-  animation: rotate360 1s ease-in-out;
-}
-
-@keyframes rotate360 {
-  100% {
-    transform: rotate(180deg)
-  }
-}
-
-#options-panel {
-  width: var(--options-width);
-  background-color: var(--player-color-semi-transparent);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.75rem;
-  padding: 1.5em;
-  border-radius: 1em;
-  box-shadow: -5px 5px 15px rgb(0, 0, 0);
-  /* Hiding it beyond screen border */
-  position: relative;
-  transition-property: left, opacity;
-  transition-duration: 0.5s;
-  transition-timing-function: ease-in-out;
-  left: 0%;
-  opacity: 100%;
-}
-
-#options-panel.options-panel--hidden {
-  left: -150%;
-  opacity: 0%;
-}
-
-.options-item {
-  width: 100%;
-  text-align: center;
-  border-top: 1px solid #fff;
-}
-
-.options-item__title {
-  font-weight: bold;
-  margin: 1em;
-}
-
-/* From https://cssanimation.dev/radio-switch/ */
-
-.radio-switch {
-  display: flex;
-  justify-content: space-evenly;
-  background: #555;
-  border-radius: 100vmax;
-  position: relative;
-  width: 100%;
-  --switch-positions: 2; /* To init by script */
-  --current-index: 0; /* To init by script */
-}
-
-.radio-switch__label {
-  cursor: pointer;
-  padding: 0.75em 0.25em;
-  flex-basis: calc(100% / var(--switch-positions));
-  z-index: 10;
-  user-select: none;
-  color: #FFF;
-  text-shadow: 0 0 2px #000;
-}
-
-.radio-switch__selection {
-  position: absolute;
-  width: calc(100% / var(--switch-positions));
-  border-radius: 100vmax;
-  left: calc(100% / var(--switch-positions) * var(--current-index));
-  height: 100%;
-  pointer-events: none;
-  background-color: var(--player-color);
-  transition: left 0.3s;
-}
-
-.radio-switch__input {
-  display: none;
-}
-
-.radio-switch__input:checked+.radio-switch__selection {
-  opacity: 0.5;
-}
-
-
 /* BOARD */
 #board {
   display: flex;
@@ -155,34 +58,35 @@ h2 {
   gap: var(--cards-gap);
   justify-content: center;
   align-items: center;
-  height: var(--board-height);
   width: var(--board-width);
-  margin: 50px auto;
 }
 
 .card-container {
   width: var(--cards-width);
   height: var(--cards-height);
   cursor: pointer;
-  perspective: calc(var(--cards-width) * 10);
+  perspective: calc(var(--cards-width) * 5);
 }
 
 .card-inner {
-  border: var(--cards-border) solid #000;
-  position: relative;
+  border: var(--cards-border) solid var(--player-color);
+  border-radius: 0.8em;
   transition: transform 0.5s;
   transform-style: preserve-3d;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .card-inner--inactive {
   transform: rotateY(180deg);
 }
 
-.card-inner,
 .card-front,
 .card-front-details,
 .card-back,
 .card-back__image {
+  border-radius: inherit;
   width: 100%;
   height: 100%;
 }
@@ -200,7 +104,7 @@ h2 {
 .card-front {
   background-color: #fff;
   background-image: url(../images/characters.png);
-  background-size: calc(var(--cards-sprite-columns) * 100%);
+  background-size: calc(var(--cards-sprite-columns) * 100%); 
 }
 
 .card-front__title {
@@ -243,13 +147,19 @@ footer {
 }
 
 footer aside {
-  font-size: 0.7em;
+  font-size: 0.5em;
   margin: 0.5em 0;
+  font-style: italic;
 }
 
-@media (orientation : portrait) {
+@media (orientation : landscape) {
   :root {
-    --board-width: 100vw;
-    --board-columns: 6;
+    --board-width: 80vw;
+    --options-width: 35vw;
+    --board-columns: 8;
+  }
+
+  header .game-logo {
+    width: 15vw;
   }
 }
