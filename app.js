@@ -1,17 +1,109 @@
 /**
+ * Switch the first letter of the given string to uppercase.
  * @param {String} s String to process.
- * @returns A new string with first character in upper case.
+ * @returns {String} A new string with first character in upper case.
  */
-const capitalize = function(s) {
+const capitalized = function (s) {
   if (s.length === 0) return '';
   if (s.length === 1) return s.charAt(0).toUpperCase();
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+/**
+ * Replace special characters in the given string 
+ * by the provided replacement string.
+ * @param {String} s String to process.
+ * @param {String} replacement Replacement string
+ * @returns {String} A new string
+ */
+const replaceSpecialCharacters = function (s, replacement) {
+  return s.replace(/[&\/\\#, +()$~%.'":*?<>{}]/g, replacement);
+}
+
+const kebabCased = function (s) {
+  return replaceSpecialCharacters(s, '-').toLowerCase();
+}
+
+const camelCased = function (s, uppercased) {
+  let newString = replaceSpecialCharacters(s, '_');
+  return uppercased ? newString.toUpperCase() : newString;
+}
+
 const app = {
+  debug: false,
+  options: [
+    {
+      caption: 'Player\'s color',
+      type: 'radio',
+      choices: [
+        { caption: 'Blue', color: '--player-color-blue', callback: () => { app.setPlayerColor('blue'); }, checked: true },
+        { caption: 'Red', color: '--player-color-red', callback: () => { app.setPlayerColor('red'); } },
+      ]
+    }
+  ],
+
+  playerColor: 'blue',
   cardsData: {},
   cardsSpriteColumns: 8,
   cardsSpriteRows: 3,
+
+  initOptions() {
+    const optionElem = document.getElementById('options');
+    for (appOption of app.options) {
+      // Main option container
+      const optionItemElem = document.createElement('li');
+      optionItemElem.className = 'options-item';
+      optionElem.appendChild(optionItemElem);
+      // Option caption
+      const optionItemCaptionElem = document.createElement('p');
+      optionItemElem.appendChild(optionItemCaptionElem);
+      optionItemCaptionElem.innerText = appOption.caption;
+      optionItemCaptionElem.className = 'options-item__title';
+      // Option radio switch container
+      const optionItemRadioSwitchElem = document.createElement('div');
+      optionItemElem.appendChild(optionItemRadioSwitchElem);
+      optionItemRadioSwitchElem.className = 'radio-switch';
+      // Selection feedback element
+      const optionSelectionElem = document.createElement('div');
+      optionItemRadioSwitchElem.appendChild(optionSelectionElem);
+      optionSelectionElem.className = 'radio-switch__selection';
+      // Adding one input per choice
+      appOption.choices.forEach((optionChoice, index) => {
+        // Radio input
+        const choiceInputElem = document.createElement('input');
+        choiceInputElem.setAttribute('type', 'radio');
+        choiceInputElem.setAttribute('id', kebabCased(`${appOption.caption} ${optionChoice.caption}`));
+        choiceInputElem.setAttribute('name', kebabCased(appOption.caption));
+        if (optionChoice.checked) choiceInputElem.setAttribute('checked', true);
+        optionItemRadioSwitchElem.appendChild(choiceInputElem);
+        choiceInputElem.className = 'radio-switch__input'
+        // Radio label
+        const choiceLabelElem = document.createElement('label');
+        choiceLabelElem.setAttribute('for', kebabCased(`${appOption.caption} ${optionChoice.caption}`));
+        optionItemRadioSwitchElem.appendChild(choiceLabelElem);
+        choiceLabelElem.className = 'radio-switch__label';
+        choiceLabelElem.innerText = optionChoice.caption;
+        // Input click listener
+        choiceInputElem.addEventListener('click', () => {
+          optionItemRadioSwitchElem.style.setProperty('--current-index', index);
+          // Callback
+          optionChoice.callback();
+        });
+      });
+    };
+  },
+
+  setPlayerColor(color) {
+    app.playerColor = color;
+    console.log(color);
+    app.updateGameStyle();
+  },
+
+  updateGameStyle() {
+    const rootElem = document.querySelector(':root');
+    // Set the player's color variable
+    rootElem.style.setProperty('--player-color-raw', `var(--player-color-${app.playerColor}-raw`);
+  },
 
   drawBoard() {
 
@@ -28,11 +120,11 @@ const app = {
           const cardBackSpecLineElem = document.createElement('p');
           cardFrontDetailsElem.appendChild(cardBackSpecLineElem);
           // Details line
-          cardBackSpecLineElem.innerText = `${capitalize(spec)} = `;
+          cardBackSpecLineElem.innerText = `${capitalized(spec)} = `;
           // Checking that the character has the spec, otherwise give it a 0 value (default)
           const charSpecValue = characterSpecs.hasOwnProperty(spec) ? characterSpecs[spec] : 0;
           // Checking that the character's spec value is within the spec values range
-          if (charSpecValue <= specsOptions.length) {  
+          if (charSpecValue <= specsOptions.length) {
             cardBackSpecLineElem.innerText += `${specsOptions[charSpecValue]}`;
           } else {
             cardBackSpecLineElem.innerText += 'UNKNOWN';
@@ -52,25 +144,43 @@ const app = {
       boardElem.appendChild(cardElem);
       cardElem.className = 'card-container';
 
-      // Card image
+      // Car inner (for the flipping effect)
+      const cardInnerElem = document.createElement('div');
+      cardElem.appendChild(cardInnerElem);
+      cardInnerElem.className = 'card-inner';
+
+      // When cardElem is clicked, toggle the cardInnerElem active class
+      cardElem.addEventListener('click', () => {
+        cardInnerElem.classList.toggle('card-inner--inactive');
+      })
+
+      // Card front (character face)
       const cardFrontElem = document.createElement('div');
-      cardElem.appendChild(cardFrontElem);
+      cardInnerElem.appendChild(cardFrontElem);
       cardFrontElem.className = 'card-front';
       [column, row] = app.cardsData.characters[characterKey]['spriteCoordinates'];
-      cardFrontElem.style.backgroundPosition = `${100 * column / (app.cardsSpriteColumns - 1)}% ${100 * row / (app.cardsSpriteRows - 1 )}%`;
-      
-      // Card title
+      cardFrontElem.style.backgroundPosition = `${100 * column / (app.cardsSpriteColumns - 1)}% ${100 * row / (app.cardsSpriteRows - 1)}%`;
+
+      // Card front title (character name)
       const cardTitleElem = document.createElement('div');
       cardFrontElem.appendChild(cardTitleElem);
       cardTitleElem.className = 'card-front__title';
-      cardTitleElem.innerText = capitalize(characterKey);
-      
-      // Card details (DEBUG)
-      addDetails(cardFrontElem);
+      cardTitleElem.innerText = capitalized(characterKey);
+
+      // Card details (debug-only)
+      if (app.debug) addDetails(cardFrontElem);
+
+      // Card back
+      const cardBackElem = document.createElement('div');
+      cardInnerElem.appendChild(cardBackElem);
+      cardBackElem.className = `card-back card-back--${app.playerColor}`;
+
+      const cardBackImageElem = document.createElement('div');
+      cardBackElem.appendChild(cardBackImageElem);
+      cardBackImageElem.className = 'card-back__image';
     }
 
     // Drawing the board
-    // console.log(app.cardsData);
     const boardElem = document.getElementById('board');
 
     // Adding cards
@@ -80,8 +190,11 @@ const app = {
   },
 
   async init() {
+    app.initOptions();
     // Read cards data
     app.cardsData = await fetch("./data/cards.json").then(response => response.json());
+    // Edit the CSS depending on the app options
+    app.updateGameStyle();
     // Draw board
     app.drawBoard();
   }
