@@ -36,13 +36,14 @@ const app = {
       caption: 'Player\'s color',
       type: 'radio',
       choices: [
-        { caption: 'Blue', color: '--player-color-blue', callback: () => { app.setPlayerColor('blue'); }, checked: true },
-        { caption: 'Red', color: '--player-color-red', callback: () => { app.setPlayerColor('red'); } },
+        { caption: 'Blue', callback: () => { app.setPlayerColor('blue'); }, checked: true },
+        { caption: 'Red', callback: () => { app.setPlayerColor('red'); } },
+        { caption: 'Yellow', callback: () => { app.setPlayerColor('yellow'); } }
       ]
     }
   ],
 
-  playerColor: 'blue',
+  playerColor: '',
   cardsData: {},
   cardsSpriteColumns: 8,
   cardsSpriteRows: 3,
@@ -63,6 +64,7 @@ const app = {
       const optionItemRadioSwitchElem = document.createElement('div');
       optionItemElem.appendChild(optionItemRadioSwitchElem);
       optionItemRadioSwitchElem.className = 'radio-switch';
+      optionItemRadioSwitchElem.style.setProperty('--switch-positions', appOption.choices.length);
       // Selection feedback element
       const optionSelectionElem = document.createElement('div');
       optionItemRadioSwitchElem.appendChild(optionSelectionElem);
@@ -74,7 +76,6 @@ const app = {
         choiceInputElem.setAttribute('type', 'radio');
         choiceInputElem.setAttribute('id', kebabCased(`${appOption.caption} ${optionChoice.caption}`));
         choiceInputElem.setAttribute('name', kebabCased(appOption.caption));
-        if (optionChoice.checked) choiceInputElem.setAttribute('checked', true);
         optionItemRadioSwitchElem.appendChild(choiceInputElem);
         choiceInputElem.className = 'radio-switch__input'
         // Radio label
@@ -89,20 +90,24 @@ const app = {
           // Callback
           optionChoice.callback();
         });
+        // If option is checked
+        if (optionChoice.checked) {
+          choiceInputElem.setAttribute('checked', true);
+          optionChoice.callback(); // we trigger the callback at startup
+        }
       });
     };
   },
 
   setPlayerColor(color) {
     app.playerColor = color;
-    console.log(color);
     app.updateGameStyle();
   },
 
   updateGameStyle() {
     const rootElem = document.querySelector(':root');
     // Set the player's color variable
-    rootElem.style.setProperty('--player-color-raw', `var(--player-color-${app.playerColor}-raw`);
+    rootElem.style.setProperty('--player-color-h', `var(--player-color-h-${app.playerColor}`);
   },
 
   drawBoard() {

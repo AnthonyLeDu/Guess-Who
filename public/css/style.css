@@ -6,20 +6,24 @@
   --board-columns: 8;
   --cards-border: 1px;
   --cards-gap: 5px;
-  --cards-width: calc((var(--board-width) / var(--board-columns)) 
-    - var(--cards-border) * 2 - var(--cards-gap) * 2);
+  --cards-width: calc((var(--board-width) / var(--board-columns)) - var(--cards-border) * 2 - var(--cards-gap) * 2);
   --cards-height: calc(var(--cards-width) / var(--cards-aspect-ratio));
-  --player-color-blue-raw: 30, 113, 255;
-  --player-color-blue: rgb(var(--player-color-blue-raw));
-  --player-color-red-raw: 255, 29, 29;
-  --player-color-red: rgb(var(--player-color-red-raw));
-  --player-color-raw: 127, 127, 127;
-  --player-color: rgb(var(--player-color-raw));
-  --player-color-semi-transparent: rgba(var(--player-color-raw), 0.6);
+  --player-color-h: 0;
+  --player-color-h-blue: 217;
+  --player-color-h-red: 0;
+  --player-color-h-yellow: 35;
+  --player-color: hsl(var(--player-color-h), 100%, 75%);
+  --player-color-semi-transparent: hsla(var(--player-color-h), 100%, 75%, 60%);
 }
 
 body {
   font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+h2 {
+  font-size: 1.5em;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 #app {
@@ -59,8 +63,8 @@ body {
   background: #d1d5db;
   border-radius: 100vmax;
   position: relative;
-  --switch-positions: 2;  /* To init by script */
-  --current-index: 0;
+  --switch-positions: 2; /* To init by script */
+  --current-index: 0; /* To init by script */
 }
 
 .radio-switch__label {
@@ -78,7 +82,7 @@ body {
   left: calc(100% / var(--switch-positions) * var(--current-index));
   height: 100%;
   pointer-events: none;
-  background-color: var(--player-color-semi-transparent);
+  background-color: var(--player-color);
   transition: left 0.3s;
 }
 
@@ -121,13 +125,21 @@ body {
   transform: rotateY(180deg);
 }
 
-.card-inner, .card-front, .card-front-details, .card-back, .card-back__image {
+.card-inner,
+.card-front,
+.card-front-details,
+.card-back,
+.card-back__image {
   width: 100%;
   height: 100%;
 }
 
-.card-front, .card-front__title, .card-front-details, .card-back {
-  -webkit-backface-visibility: hidden; /* Safari */
+.card-front,
+.card-front__title,
+.card-front-details,
+.card-back {
+  -webkit-backface-visibility: hidden;
+  /* Safari */
   backface-visibility: hidden;
   position: absolute;
 }
@@ -141,7 +153,8 @@ body {
 .card-front__title {
   text-align: center;
   left: 50%;
-  transform: translate(-50%, 0); /* Centering */
+  transform: translate(-50%, 0);
+  /* Centering */
   bottom: 5%;
   font-weight: bold;
   font-size: calc(var(--cards-width) * 0.18);
@@ -159,7 +172,8 @@ body {
 }
 
 .card-back {
-  transform: rotateY(180deg); /* Initially hidden */
+  transform: rotateY(180deg);
+  /* Initially hidden */
   background: var(--player-color);
 }
 
