@@ -117,87 +117,97 @@ const app = {
     rootElem.style.setProperty('--player-color-h', `var(--player-color-h-${app.playerColor}`);
   },
 
-  drawBoard() {
+  drawSecretCard() {
+    const appElem = document.getElementById('app');
+    // Randomly pick a character's key
+    const keys = Object.keys(app.cardsData.characters);
+    const characterKey = keys[ keys.length * Math.random() << 0];
+    // Create the card
+    appElem.appendChild(app.createCard(characterKey, true));
+  },
 
-    const addCard = (boardElem, characterKey) => {
-
-      // DEBUG - Card details (on hover)
-      const addDetails = (cardElem) => {
-        const cardFrontDetailsElem = document.createElement('div');
-        cardElem.appendChild(cardFrontDetailsElem);
-        cardFrontDetailsElem.className = 'card-front-details';
-        characterSpecs = app.cardsData.characters[characterKey]['specs'];
-        for (spec of app.cardsData.specsDisplayOrder) {
-          specsOptions = app.cardsData.specs[spec];
-          const cardBackSpecLineElem = document.createElement('p');
-          cardFrontDetailsElem.appendChild(cardBackSpecLineElem);
-          // Details line
-          cardBackSpecLineElem.innerText = `${capitalized(spec)} = `;
-          // Checking that the character has the spec, otherwise give it a 0 value (default)
-          const charSpecValue = characterSpecs.hasOwnProperty(spec) ? characterSpecs[spec] : 0;
-          // Checking that the character's spec value is within the spec values range
-          if (charSpecValue <= specsOptions.length) {
-            cardBackSpecLineElem.innerText += `${specsOptions[charSpecValue]}`;
-          } else {
-            cardBackSpecLineElem.innerText += 'UNKNOWN';
-          }
+  createCard(characterKey, isSecretCard) {
+    // DEBUG - Card details (on hover)
+    const addDetails = (cardElem) => {
+      const cardFrontDetailsElem = document.createElement('div');
+      cardElem.appendChild(cardFrontDetailsElem);
+      cardFrontDetailsElem.className = 'card-front-details';
+      characterSpecs = app.cardsData.characters[characterKey]['specs'];
+      for (spec of app.cardsData.specsDisplayOrder) {
+        specsOptions = app.cardsData.specs[spec];
+        const cardBackSpecLineElem = document.createElement('p');
+        cardFrontDetailsElem.appendChild(cardBackSpecLineElem);
+        // Details line
+        cardBackSpecLineElem.innerText = `${capitalized(spec)} = `;
+        // Checking that the character has the spec, otherwise give it a 0 value (default)
+        const charSpecValue = characterSpecs.hasOwnProperty(spec) ? characterSpecs[spec] : 0;
+        // Checking that the character's spec value is within the spec values range
+        if (charSpecValue <= specsOptions.length) {
+          cardBackSpecLineElem.innerText += `${specsOptions[charSpecValue]}`;
+        } else {
+          cardBackSpecLineElem.innerText += 'UNKNOWN';
         }
-        // Show/hide cards details when hovering
-        cardElem.addEventListener('mouseover', () => {
-          cardFrontDetailsElem.style.display = 'block';
-        })
-        cardElem.addEventListener('mouseleave', () => {
-          cardFrontDetailsElem.style.display = 'none';
-        })
       }
-
-      // Card container
-      const cardElem = document.createElement('div');
-      boardElem.appendChild(cardElem);
-      cardElem.className = 'card-container';
-
-      // Car inner (for the flipping effect)
-      const cardInnerElem = document.createElement('div');
-      cardElem.appendChild(cardInnerElem);
-      cardInnerElem.className = 'card-inner';
-
-      // When cardElem is clicked, toggle the cardInnerElem active class
-      cardElem.addEventListener('click', () => {
-        cardInnerElem.classList.toggle('card-inner--inactive');
+      // Show/hide cards details when hovering
+      cardElem.addEventListener('mouseover', () => {
+        cardFrontDetailsElem.style.display = 'block';
       })
-
-      // Card front (character face)
-      const cardFrontElem = document.createElement('div');
-      cardInnerElem.appendChild(cardFrontElem);
-      cardFrontElem.className = 'card-front';
-      [column, row] = app.cardsData.characters[characterKey]['spriteCoordinates'];
-      cardFrontElem.style.backgroundPosition = `${100 * column / (app.cardsSpriteColumns - 1)}% ${100 * row / (app.cardsSpriteRows - 1)}%`;
-
-      // Card front title (character name)
-      const cardTitleElem = document.createElement('div');
-      cardFrontElem.appendChild(cardTitleElem);
-      cardTitleElem.className = 'card-front__title';
-      cardTitleElem.innerText = capitalized(characterKey);
-
-      // Card details (debug-only)
-      if (app.debug) addDetails(cardFrontElem);
-
-      // Card back
-      const cardBackElem = document.createElement('div');
-      cardInnerElem.appendChild(cardBackElem);
-      cardBackElem.className = `card-back card-back--${app.playerColor}`;
-
-      const cardBackImageElem = document.createElement('div');
-      cardBackElem.appendChild(cardBackImageElem);
-      cardBackImageElem.className = 'card-back__image';
+      cardElem.addEventListener('mouseleave', () => {
+        cardFrontDetailsElem.style.display = 'none';
+      })
     }
 
+    // Card container
+    const cardElem = document.createElement('div');
+    cardElem.className = 'card-container';
+    cardElem.classList.add( isSecretCard ? 'card-container--secret' : 'card-container--board');
+
+    // Car inner (for the flipping effect)
+    const cardInnerElem = document.createElement('div');
+    cardElem.appendChild(cardInnerElem);
+    cardInnerElem.className = 'card';
+
+    // When cardElem is clicked, toggle the cardInnerElem active class
+    cardElem.addEventListener('click', () => {
+      cardInnerElem.classList.toggle('card--inactive');
+    })
+
+    // Card front (character face)
+    const cardFrontElem = document.createElement('div');
+    cardInnerElem.appendChild(cardFrontElem);
+    cardFrontElem.className = 'card-front';
+    [column, row] = app.cardsData.characters[characterKey]['spriteCoordinates'];
+    cardFrontElem.style.backgroundPosition = `${100 * column / (app.cardsSpriteColumns - 1)}% ${100 * row / (app.cardsSpriteRows - 1)}%`;
+
+    // Card front title (character name)
+    const cardTitleElem = document.createElement('div');
+    cardFrontElem.appendChild(cardTitleElem);
+    cardTitleElem.className = 'card-front__title';
+    cardTitleElem.innerText = capitalized(characterKey);
+
+    // Card details (debug-only)
+    if (app.debug) addDetails(cardFrontElem);
+
+    // Card back
+    const cardBackElem = document.createElement('div');
+    cardInnerElem.appendChild(cardBackElem);
+    cardBackElem.className = `card-back card-back--${app.playerColor}`;
+
+    const cardBackImageElem = document.createElement('div');
+    cardBackElem.appendChild(cardBackImageElem);
+    cardBackImageElem.className = 'card-back__image';
+
+    return cardElem;
+  },
+
+  redrawBoard() {
     // Drawing the board
     const boardElem = document.getElementById('board');
-
-    // Adding cards
+    
+    // Adding the cards
     for (charKey in app.cardsData.characters) {
-      addCard(boardElem, charKey);
+      boardElem.appendChild(app.createCard(charKey, false));
+
     }
   },
 
@@ -207,8 +217,10 @@ const app = {
     app.cardsData = await fetch("./data/cards.json").then(response => response.json());
     // Edit the CSS depending on the app options
     app.updateGameStyle();
-    // Draw board
-    app.drawBoard();
+    // Redraw board
+    app.redrawBoard();
+    // Pick the player's secret card
+    app.drawSecretCard();
   }
 }
 

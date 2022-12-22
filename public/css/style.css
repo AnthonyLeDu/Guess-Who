@@ -3,15 +3,21 @@
   --board-width: 100vw;
   --board-columns: 5;
   --options-width: 95vw;
-  
+
   /* Sprite */
   --cards-sprite-columns: 8;
   --cards-aspect-ratio: 0.6293586;
 
   --cards-border: 1px;
   --cards-gap: 5px;
-  --cards-width: calc((var(--board-width) / var(--board-columns)) - var(--cards-border) * 2 - var(--cards-gap) * 2);
-  --cards-height: calc(var(--cards-width) / var(--cards-aspect-ratio));
+  --board-card-width: calc((var(--board-width) / var(--board-columns)) - var(--cards-border) * 2 - var(--cards-gap) * 2);
+  --board-card-height: calc(var(--board-card-width) / var(--cards-aspect-ratio));
+
+  --secret-card-width: calc(var(--board-card-width) * 2);
+  --secret-card-height: calc(var(--board-card-height) * 2);
+
+  --color-yellow: hsl(50, 80%, 60%);
+
   --player-color-h: 0;
   --player-color-s: 80%;
   --player-color-l: 60%;
@@ -62,25 +68,57 @@ h2 {
 }
 
 .card-container {
-  width: var(--cards-width);
-  height: var(--cards-height);
   cursor: pointer;
-  perspective: calc(var(--cards-width) * 5);
+  perspective: calc(var(--board-card-width) * 5);
 }
 
-.card-inner {
-  border: var(--cards-border) solid var(--player-color);
-  border-radius: 0.8em;
+.card-container--secret {
   transition: transform 0.5s;
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  transform: translateX(-50%);
+  /* Centering */
+  width: var(--secret-card-width);
+  height: var(--secret-card-height);
+  box-shadow: 5px 5px 10px #555;
+}
+
+.card-container--secret:has(.card--inactive) {
+  transform: translate(-50%, 130%);
+}
+
+.card-container--board {
+  width: var(--board-card-width);
+  height: var(--board-card-height);
+}
+
+.card {
+  border-radius: 0.8em;
+  transition-property: transform;
+  transition-duration: 0.5s;
   transform-style: preserve-3d;
   width: 100%;
   height: 100%;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.card-inner--inactive {
+.card-container--secret .card {
+  border: var(--cards-border) solid var(--color-yellow);
+  background-color: var(--color-yellow);
+}
+
+.card-container--board .card {
+  border: var(--cards-border) solid var(--player-color);
+}
+
+.card--inactive {
   transform: rotateY(180deg);
 }
+
 
 .card-front,
 .card-front-details,
@@ -104,19 +142,26 @@ h2 {
 .card-front {
   background-color: #fff;
   background-image: url(../images/characters.png);
-  background-size: calc(var(--cards-sprite-columns) * 100%); 
+  background-size: calc(var(--cards-sprite-columns) * 100%);
+}
+
+.card-container--secret .card-front {
+  width: 70%;
+  height: 70%;
+  border-radius: 0.4em;
 }
 
 .card-front__title {
   text-align: center;
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translateX(-50%);
   /* Centering */
   bottom: 5%;
   font-weight: bold;
-  font-size: calc(var(--cards-width) * 0.18);
+  font-size: calc(var(--board-card-width) * 0.18);
 }
 
+/* Details for DEBUGGING only */
 .card-front-details {
   display: none;
   z-index: 1;
@@ -125,8 +170,11 @@ h2 {
 }
 
 .card-front-details p {
-  font-size: calc(var(--cards-width) * 0.1);
+  font-size: calc(var(--board-card-width) * 0.1);
 }
+
+
+/* CARD BACK */
 
 .card-back {
   transform: rotateY(180deg);
@@ -136,10 +184,19 @@ h2 {
 
 .card-back__image {
   position: absolute;
-  mix-blend-mode:hard-light;
-  background-image: url(../images/card-back.png);
   background-size: cover;
 }
+
+/* Different background if secret card */
+.card-container--secret .card-back__image {
+  background-image: url(../images/card-back-secret.png);
+}
+
+.card-container--board .card-back__image {
+  mix-blend-mode: hard-light;
+  background-image: url(../images/card-back.png);
+}
+
 
 footer {
   text-align: center;
@@ -147,14 +204,14 @@ footer {
 }
 
 footer aside {
-  font-size: 0.5em;
+  font-size: 0.7em;
   margin: 0.5em 0;
   font-style: italic;
 }
 
 @media (orientation : landscape) {
   :root {
-    --board-width: 80vw;
+    --board-width: 70vw;
     --options-width: 35vw;
     --board-columns: 8;
   }
@@ -162,4 +219,5 @@ footer aside {
   header .game-logo {
     width: 15vw;
   }
+
 }
