@@ -20,20 +20,31 @@ const replaceSpecialCharacters = function (s, replacement) {
   return s.replace(/[&\/\\#, +()$~%.'":*?<>{}]/g, replacement);
 }
 
+/**
+ * Convert a String to kebabCase (e.g. "kebab-case").
+ * @param {String} s String to process
+ * @returns {String} The processed string
+ */
 const kebabCased = function (s) {
   return replaceSpecialCharacters(s, '-').toLowerCase();
 }
 
-const camelCased = function (s, uppercased) {
+/**
+ * Convert a String to snakeCase (eg. "snake_case")
+ * @param {String} s String to process
+ * @param {Boolean} uppercased True to output an uppercased string (UPPER_SNAKE_CASE)
+ * @returns {String} The processed string
+ */
+const snakeCased = function (s, uppercased) {
   let newString = replaceSpecialCharacters(s, '_');
-  return uppercased ? newString.toUpperCase() : newString;
+  return uppercased ? newString.toUpperCase() : newString.toLowerCase();
 }
 
 /**
- * Shuffles an array
+ * Shuffles an array.
  * (from : https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array)
- * @param {Array} array The array to shuffle
- * @returns The array, shuffled
+ * @param {Array} array The array to shuffle.
+ * @returns {Array} The array, shuffled.
  */
 const shuffle = function(array) {
   let currentIndex = array.length,  randomIndex;
@@ -52,8 +63,23 @@ const shuffle = function(array) {
   return array;
 }
 
+/**
+ * Shuffles a given Object's keys and return them in an Array.
+ * @param {Object} object The object whose keys we want to shuffle.
+ * @returns {Array} Object keys, shuffled.
+ */
+const shuffledKeys = function(object) {
+  // Randomly pick a character's key
+  const keys = Object.keys(object);
+  return shuffle(keys);
+}
+
+/**
+ * Main application
+ * Needs to be initialized using app.init().
+ */
 const app = {
-  debug: false,
+  debug: false, // Allows debug info to appear on top of cards when hovering
   options: [
     {
       caption: 'Player\'s color',
@@ -72,6 +98,9 @@ const app = {
   cardsSpriteColumns: 8,
   cardsSpriteRows: 3,
 
+  /**
+   * Generates the options panel using the app.options info
+   */
   initOptions() {
     // Filling the options pannel
     const optionsPanelElem = document.getElementById('options-panel');
@@ -129,11 +158,18 @@ const app = {
     })
   },
 
+  /**
+   * Sets the current player's color and update the whole game style.
+   * @param {String} color Color
+   */
   setPlayerColor(color) {
     app.playerColor = color;
     app.updateGameStyle();
   },
 
+  /**
+   * Updates the stylesheet based on app properties.
+   */
   updateGameStyle() {
     const rootElem = document.querySelector(':root');
     // Set the sprite columns and rows
@@ -143,19 +179,23 @@ const app = {
     rootElem.style.setProperty('--player-color-raw', `var(--player-color-raw-${app.playerColor})`);
   },
 
-  shuffledCharacterKeys() {
-    // Randomly pick a character's key
-    const keys = Object.keys(app.cardsData.characters);
-    return shuffle(keys);
-  },
-
+  /**
+   * Randomly pick a secret card and add it to the board.
+   */
   drawSecretCard() {
     const boardElem = document.getElementById('board');
-    const characterKey = app.shuffledCharacterKeys()[0];
+    const characterKey = shuffledKeys(app.cardsData.characters)[0];
     // Create the card
     boardElem.appendChild(app.createCard(characterKey, true));
   },
 
+  /**
+   * Creates the full card HTML element.
+   * @param {String} characterKey Character object key (the name of the character in lowercase)
+   * @param {Boolean} isSecretCard True if the card to create is the secret card.
+   * @param {Number} index Index of the card on the board.
+   * @returns {HTMLElement} The card container element.
+   */
   createCard(characterKey, isSecretCard, index=null) {
     // DEBUG - Card details (on hover)
     const addDetails = (cardElem) => {
@@ -237,15 +277,22 @@ const app = {
     return cardContainerElem;
   },
 
+  /**
+   * Clears and redraws the game board.
+   */
   redrawBoard() {
     // Drawing the board
     const boardElem = document.getElementById('board');
+    boardElem.innerHTML = '';
     // Adding the cards
-    app.shuffledCharacterKeys().forEach((charKey, index) => {
+    shuffledKeys(app.cardsData.characters).forEach((charKey, index) => {
       boardElem.appendChild(app.createCard(charKey, false, index));
     });
   },
 
+  /**
+   * Init the game.
+   */
   async init() {
     app.initOptions();
     // Read cards data
