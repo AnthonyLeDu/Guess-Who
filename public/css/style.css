@@ -15,17 +15,15 @@
 
   --color-yellow: hsl(50, 80%, 60%);
 
-  --player-color-h: 0;
-  --player-color-s: 80%;
-  --player-color-l: 60%;
-  --player-color-h-blue: 217;
-  --player-color-h-red: 0;
-  --player-color-h-yellow: 45;
-  --player-color-h-green: 120;
-  --player-color-h-purple: 245;
-
-  --player-color: hsl(var(--player-color-h), var(--player-color-s), var(--player-color-l));
-  --player-color-semi-transparent: hsla(var(--player-color-h), var(--player-color-s), var(--player-color-l), 85%);
+  --player-color-raw-blue: 217, 80%, 60%;
+  --player-color-raw-red: 0, 80%, 60%;
+  --player-color-raw-green: 120, 60%, 40%;
+  --player-color-raw-purple: 245, 80%, 60%;
+  
+  /* Init via script */
+  --player-color-raw : 0, 0%, 0%;
+  --player-color: hsl(var(--player-color-raw));
+  --player-color-semi-transparent: hsla(var(--player-color-raw), 85%);
 }
 
 header {
@@ -198,16 +196,16 @@ footer aside {
   }
 }
 
-@media (min-width : 800px) {
+@media (min-width : 900px) {
   :root {
     --board-columns: 7;
     --options-width: 45vw;
   }
 }
 
-@media (min-width : 1000px) {
+@media (min-width : 1200px) {
   :root {
     --board-columns: 10;
-    --options-width: 30vw;
+    --options-width: 35vw;
   }
 }

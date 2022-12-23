@@ -140,7 +140,7 @@ const app = {
     rootElem.style.setProperty('--cards-sprite-rows', app.cardsSpriteRows);
     rootElem.style.setProperty('--cards-sprite-columns', app.cardsSpriteColumns);
     // Set the player's color variable
-    rootElem.style.setProperty('--player-color-h', `var(--player-color-h-${app.playerColor})`);
+    rootElem.style.setProperty('--player-color-raw', `var(--player-color-raw-${app.playerColor})`);
   },
 
   shuffledCharacterKeys() {
